@@ -37,7 +37,34 @@ public async Task<ActionResult<User>> CreateUser([FromBody] User user)
     return CreatedAtAction(nameof(GetUserById), new { id = user.UserId }, user);
 }
 
+[HttpPut("{id}")]
+public async Task<ActionResult> UpdateUser(int id, [FromBody] User user)
+{
+    if (id != user.UserId)
+    {
+        return BadRequest("The provided ID does not match the User's ID.");
+    }
 
+    _context.Entry(user).State = EntityState.Modified;
+
+    try
+    {
+        await _context.SaveChangesAsync();
+    }
+    catch (DbUpdateConcurrencyException)
+    {
+        if (!_context.Users.Any(u => u.UserId == id))
+        {
+            return NotFound();
+        }
+        else
+        {
+            throw;
+        }
+    }
+
+    return NoContent();
+}
             
         }
     }
