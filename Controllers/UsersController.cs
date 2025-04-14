@@ -7,7 +7,7 @@ namespace Poster.API.Controllers {
     [ApiController]
     [Route("api/[controller]")]
 
-    public class UserController : Controllerbase 
+    public class UserController : ControllerBase 
     {
         private readonly AppDbContext _context;
 
