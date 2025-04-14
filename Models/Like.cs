@@ -9,7 +9,7 @@
 
         // Navigation properties
         public Post Post { get; set; }
-        // public User User { get; set; } // if using a user model
+        public User User { get; set; }
     }
 
 }
