@@ -25,6 +25,19 @@ public async Task<ActionResult<IEnumerable<User>>> GetUsers([FromQuery] int user
         .ToListAsync();
     return Ok(users);
 }
+
+[HttpPost]
+public async Task<ActionResult<User>> CreateUser([FromBody] User user)
+{
+    _context.Users.Add(user);
+    await _context.SaveChangesAsync();
+
+    // Returns a 201 Created response with a route to fetch the created user.
+    // Ensure you have an action like GetUserById to match this route.
+    return CreatedAtAction(nameof(GetUserById), new { id = user.UserId }, user);
+}
+
+
             
         }
     }
