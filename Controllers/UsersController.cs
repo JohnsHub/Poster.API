@@ -18,12 +18,13 @@ namespace Poster.API.Controllers {
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers([FromQuery] int userId)
-        {
-            var users = await _context.Users
-			.Where(u => u.UserId == UserId)
-			.ToListAsync();
-			return Ok(users);
+public async Task<ActionResult<IEnumerable<User>>> GetUsers([FromQuery] int userId)
+{
+    var users = await _context.Users
+        .Where(u => u.UserId == userId)
+        .ToListAsync();
+    return Ok(users);
+}
             
         }
     }
