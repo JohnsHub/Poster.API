@@ -13,13 +13,17 @@ namespace Poster.API.Controllers {
 
         public UserController (AppDbContext context)
         {
-            _context = context.Where(c.id => 
+            _context = context;
+
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers([FromQuery] int id)
+        public async Task<ActionResult<IEnumerable<User>>> GetUsers([FromQuery] int userId)
         {
-            var users = await _context.Users;
+            var users = await _context.Users
+			.Where(u => u.UserId == UserId)
+			.ToListAsync();
+			return Ok(users);
             
         }
     }
