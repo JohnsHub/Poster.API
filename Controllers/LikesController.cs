@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using Poster.API.Data;
 using Poster.API.Models;
 using System.Runtime.InteropServices;
+using System.Security.Claims;
 
 namespace Poster.API.Controllers
 {
@@ -28,9 +31,12 @@ namespace Poster.API.Controllers
         }
 
         // POST: api/Like
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Like>> CreateLike([FromBody] Like like)
         {
+            like .UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            // Timestamp it
             like.LikedAt = DateTime.UtcNow;
             _context.Likes.Add(like);
             await _context.SaveChangesAsync();
@@ -38,6 +44,7 @@ namespace Poster.API.Controllers
         }
 
         // DELETE: api/Like/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteLike(int id)
         {
@@ -53,6 +60,7 @@ namespace Poster.API.Controllers
         }
 
         // PUT: api/Like/5
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateLike(int id, [FromBody] Like like)
         {

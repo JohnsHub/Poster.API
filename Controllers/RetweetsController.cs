@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using Poster.API.Data;
 using Poster.API.Models;
+using System.Security.Claims;
 
 namespace Poster.API.Controllers
 {
@@ -27,9 +30,12 @@ namespace Poster.API.Controllers
         }
 
         // POST: api/Retweets
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Retweet>> CreateRetweet([FromBody] Retweet retweet)
         {
+            retweet.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            // Timestamp it
             retweet.RetweetedAt = DateTime.UtcNow;
             _context.Retweets.Add(retweet);
             await _context.SaveChangesAsync();
@@ -37,6 +43,7 @@ namespace Poster.API.Controllers
         }
 
         // DELETE: api/Retweets/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRetweet(int id)
         {
@@ -51,6 +58,7 @@ namespace Poster.API.Controllers
         }
 
         // PUT: api/Retweets/5
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateRetweet(int id, [FromBody] Retweet retweet)
         {
