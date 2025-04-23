@@ -32,7 +32,9 @@ namespace Poster.API.Controllers
                     Id = p.Id,
                     Content = p.Content,
                     CreatedAt = p.CreatedAt,
-                    UserName = p.User.UserName
+                    UserName = p.User.UserName,
+                    UserId = p.UserId,
+                    DisplayName = p.DisplayName
                 })
                 .ToListAsync();
 

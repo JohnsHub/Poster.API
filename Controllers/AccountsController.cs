@@ -40,7 +40,8 @@ namespace Poster.API.Controllers
             var response = new RegisterResponseDto
             {
                 Id = user.Id,
-                UserName = user.UserName
+                UserName = user.UserName,
+                DisplayName = user.DisplayName
             };
             return Ok(response);
         }
