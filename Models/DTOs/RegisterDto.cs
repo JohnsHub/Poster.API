@@ -12,5 +12,9 @@ namespace Poster.API.Models.DTOs
 
         [Required, MinLength(6)]
         public string Password { get; set; }
+        [Required]
+        public string ConfirmPassword { get; set; }
+        [Required]
+        public string DisplayName { get; set; }
     }
 }

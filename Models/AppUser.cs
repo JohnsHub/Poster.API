@@ -6,6 +6,7 @@ namespace Poster.API.Models
 {
     public class AppUser : IdentityUser
     {
+        public string DisplayName { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public string ProfilePictureUrl { get; set; } = string.Empty;
         public string Bio { get; set; } = string.Empty;
@@ -16,5 +17,7 @@ namespace Poster.API.Models
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
         public ICollection<Like> Likes { get; set; } = new List<Like>();
         public ICollection<Retweet> Retweets { get; set; } = new List<Retweet>();
+        public ICollection<Follow> Followers { get; set; } = new List<Follow>();
+        public ICollection<Follow> Following { get; set; } = new List<Follow>();
     }
 }
