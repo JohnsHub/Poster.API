@@ -33,16 +33,16 @@ namespace Poster.API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = new AppUser
-            {
-                UserName = dto.Username,
-                Email = dto.Email
-            };
+            var user = new AppUser { UserName = dto.Username, Email = dto.Email };
             var res = await _users.CreateAsync(user, dto.Password);
-            if (!res.Succeeded)
-                return BadRequest(res.Errors);
+            if (!res.Succeeded) return BadRequest(res.Errors);
 
-            return Ok(new { user.Id, user.UserName });
+            var response = new RegisterResponseDto
+            {
+                Id = user.Id,
+                UserName = user.UserName
+            };
+            return Ok(response);
         }
 
         [HttpPost("login")]
@@ -76,7 +76,9 @@ namespace Poster.API.Controllers
                 signingCredentials: creds
             );
 
-            return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(token) });
+            var jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
+            var response = new LoginResponseDto { Token = jwtToken };
+            return Ok(response);
         }
     }
 }
