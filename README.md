@@ -72,9 +72,3 @@ Posts & Interactions:
 | GET    | `/api/users`                    | List all users                       |
 | GET    | `/api/users/{id}`               | Retrieve user profile by ID          |
 | DELETE | `/api/users/{id}` (auth)        | Delete user account (self only)      |
-
-## Documentation
-
-- **Swagger UI**: Navigate to `https://<host>/swagger` after startup for interactive API exploration.
-- **Postman Collection**: A Postman collection is provided in the repository under `/docs/PostmanCollection.json`.
-
