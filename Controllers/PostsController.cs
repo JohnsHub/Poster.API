@@ -19,7 +19,6 @@ namespace Poster.API.Controllers
             _context = context;
         }
 
-        // Publicly viewable list of posts as flat DTOs
         [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PostDto>>> GetPosts()
@@ -41,7 +40,6 @@ namespace Poster.API.Controllers
             return Ok(dtos);
         }
 
-        // Creating a post remains unchanged (you can still use CreatePostDto)
         [Authorize]
         [HttpPost]
         public async Task<ActionResult<PostDto>> CreatePost([FromBody] CreatePostDto dto)
@@ -57,13 +55,12 @@ namespace Poster.API.Controllers
             _context.Posts.Add(post);
             await _context.SaveChangesAsync();
 
-            // Return the new post as a DTO
             var resultDto = new PostDto
             {
                 Id = post.Id,
                 Content = post.Content,
                 CreatedAt = post.CreatedAt,
-                UserName = User.Identity!.Name!  // or p.User.UserName if re-loading
+                UserName = User.Identity!.Name!
             };
 
             return CreatedAtAction(
@@ -78,7 +75,6 @@ namespace Poster.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePost(int id)
         {
-            // 1) Load the post along with its comments, likes, and retweets
             var post = await _context.Posts
                 .Include(p => p.Comments)
                 .Include(p => p.Likes)
@@ -88,12 +84,10 @@ namespace Poster.API.Controllers
             if (post == null)
                 return NotFound();
 
-            // 2) Only the author may delete
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (post.UserId != userId)
                 return Forbid();
 
-            // 3) Remove all dependent rows
             if (post.Comments.Any())
                 _context.Comments.RemoveRange(post.Comments);
 
@@ -103,7 +97,6 @@ namespace Poster.API.Controllers
             if (post.Retweets.Any())
                 _context.Retweets.RemoveRange(post.Retweets);
 
-            // 4) Now delete the post itself
             _context.Posts.Remove(post);
 
             await _context.SaveChangesAsync();
@@ -115,15 +108,12 @@ namespace Poster.API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePost(int id, [FromBody] UpdatePostDto dto)
         {
-            // 1) Load the post
             var post = await _context.Posts.FindAsync(id);
             if (post == null)
                 return NotFound();
-            // 2) Only the author may update
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (post.UserId != userId)
                 return Forbid();
-            // 3) Update the content
             post.Content = dto.Content;
             await _context.SaveChangesAsync();
             return NoContent();
