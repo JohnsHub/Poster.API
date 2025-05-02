@@ -56,38 +56,5 @@ namespace Poster.API.Controllers
             await _context.SaveChangesAsync();
             return NoContent();
         }
-
-        // PUT: api/Retweets/5
-        [Authorize]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateRetweet(int id, [FromBody] Retweet retweet)
-        {
-            if (id != retweet.Id)
-            {
-                return BadRequest();
-            }
-            _context.Entry(retweet).State = EntityState.Modified;
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!RetweetExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            return NoContent();
-        }
-
-        private bool RetweetExists(int id)
-        {
-            return _context.Retweets.Any(e => e.Id == id);
-        }
     }
 }
